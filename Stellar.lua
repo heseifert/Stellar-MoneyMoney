@@ -1,6 +1,6 @@
 -- Inofficial Stellar (XLM) Extension for MoneyMoney
--- Fetches Stellar (XLM) quantity for addresses via blockexplorer API
--- Fetches Stellar (XLM) price in EUR via coinmarketcap API
+-- Fetches Stellar (XLM) quantity for addresses via Stellar Horizon API
+-- Fetches Stellar (XLM) price in EUR via cryptonator API
 -- Returns cryptoassets as securities
 --
 -- Username: Stellar Adresses comma seperated
@@ -30,7 +30,7 @@
 
 
 WebBanking{
-  version = 0.1,
+  version = 0.2,
   description = "Include your Stellar as cryptoportfolio in MoneyMoney by providing Stellar (XLM) addresses as usernme (comma seperated) and a random Password",
   services= { "Stellar" }
 }
@@ -71,7 +71,7 @@ function RefreshAccount (account, since)
       currency = nil,
       market = "cryptocompare",
       quantity = stellarQuantity,
-      price = prices["price_eur"],
+      price = prices["price"],
     }
   end
 
@@ -87,7 +87,7 @@ function requestStellarPrice()
   response = connection:request("GET", cryptocompareRequestUrl(), {})
   json = JSON(response)
 
-  return json:dictionary()[1]
+  return json:dictionary()["ticker"]
 end
 
 function requestStellarQuantityForStellarAddress(stellarAddress)
@@ -99,7 +99,7 @@ end
 -- Helper Functions
 
 function cryptocompareRequestUrl()
-  return "https://api.coinmarketcap.com/v1/ticker/stellar/?convert=EUR"
+  return "https://api.cryptonator.com/api/ticker/xlm-eur"
 end
 
 function stellarRequestUrl(stellarAddress)
